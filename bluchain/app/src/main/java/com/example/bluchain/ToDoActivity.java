@@ -334,8 +334,7 @@ public class ToDoActivity extends Activity {
      */
 
     private List<ToDoItem> refreshItemsFromMobileServiceTable() throws ExecutionException, InterruptedException {
-        return mToDoTable.where().field("complete").
-                eq(val(false)).execute().get();
+        return mToDoTable.where().field("complete").eq(val(false)).execute().get();
     }
 
     //Offline Sync

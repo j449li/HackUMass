@@ -24,6 +24,12 @@ public class ToDoItem {
     private boolean mComplete;
 
     /**
+     *
+     */
+    @com.google.gson.annotations.SerializedName("swag")
+    private String mSwag = "swag";
+
+    /**
      * ToDoItem constructor
      */
     public ToDoItem() {
@@ -46,6 +52,14 @@ public class ToDoItem {
     public ToDoItem(String text, String id) {
         this.setText(text);
         this.setId(id);
+    }
+
+    public String getSwag() {
+        return mSwag;
+    }
+
+    public void setSwag(String swag) {
+        mSwag = swag;
     }
 
     /**
