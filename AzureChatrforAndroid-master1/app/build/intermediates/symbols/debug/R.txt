@@ -625,7 +625,7 @@ int id line3 0x7f0c0089
 int id listMode 0x7f0c000a
 int id listViewChat 0x7f0c006d
 int id list_item 0x7f0c0047
-int id loadingProgressBar 0x7f0c006f
+int id loadingProgressBar 0x7f0c006e
 int id logo_only 0x7f0c0039
 int id match_parent 0x7f0c0032
 int id media_actions 0x7f0c0083
@@ -684,7 +684,7 @@ int id test 0x7f0c002f
 int id text 0x7f0c008a
 int id text2 0x7f0c0088
 int id textChatItem 0x7f0c008d
-int id textNewChat 0x7f0c006e
+int id textNewChat 0x7f0c006f
 int id textSpacerNoButtons 0x7f0c0050
 int id text_wrapper 0x7f0c0079
 int id time 0x7f0c0086

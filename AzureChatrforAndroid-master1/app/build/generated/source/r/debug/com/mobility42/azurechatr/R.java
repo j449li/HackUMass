@@ -2086,7 +2086,7 @@ containing a value of this type.
         public static final int listMode=0x7f0c000a;
         public static final int listViewChat=0x7f0c006d;
         public static final int list_item=0x7f0c0047;
-        public static final int loadingProgressBar=0x7f0c006f;
+        public static final int loadingProgressBar=0x7f0c006e;
         public static final int logo_only=0x7f0c0039;
         public static final int match_parent=0x7f0c0032;
         public static final int media_actions=0x7f0c0083;
@@ -2145,7 +2145,7 @@ containing a value of this type.
         public static final int text=0x7f0c008a;
         public static final int text2=0x7f0c0088;
         public static final int textChatItem=0x7f0c008d;
-        public static final int textNewChat=0x7f0c006e;
+        public static final int textNewChat=0x7f0c006f;
         public static final int textSpacerNoButtons=0x7f0c0050;
         public static final int text_wrapper=0x7f0c0079;
         public static final int time=0x7f0c0086;

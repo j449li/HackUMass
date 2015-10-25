@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:background="#71BCFA"
         android:padding="6dip"
+        android:gravity="bottom"
         android:layout_gravity="bottom">
 
         <ProgressBar
