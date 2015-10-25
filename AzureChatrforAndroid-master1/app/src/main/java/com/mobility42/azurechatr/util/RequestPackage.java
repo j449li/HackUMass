@@ -14,6 +14,8 @@ public class RequestPackage implements Serializable {
     public String request;
     public List<String> relayPath = new ArrayList<>();
 
+    public RequestPackage() {}
+
     public RequestPackage(String str) {
         String[] split = str.split("|");
         senderId = split[0];

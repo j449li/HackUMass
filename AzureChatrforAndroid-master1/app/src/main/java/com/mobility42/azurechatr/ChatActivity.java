@@ -1,15 +1,23 @@
 package com.mobility42.azurechatr;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,8 +25,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.microsoft.windowsazure.messaging.*;
 import com.microsoft.windowsazure.notifications.NotificationsManager;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
@@ -30,15 +41,25 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponseCallback;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
-import com.mobility42.azurechatr.services.BlueToothService;
+import com.mobility42.azurechatr.util.RequestPackage;
+import com.mobility42.azurechatr.util.ServerSocket;
+import com.mobility42.azurechatr.util.ServerSocketThread;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.*;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class ChatActivity extends Activity {
 	
 	public static final String DISPLAY_MESSAGE_ACTION = "displaymessage";
 	public static final String EXTRA_USERNAME = "Jay Sarbad";
 	public static final String EXTRA_MESSAGE = "message";
+
+	boolean testRequest = true;
 
 	// Secret IDs, Azure App Keys and Connection Strings NOT to be shared with the public
 	private String AZUREMOBILESERVICES_URI = "https://bluchain.azure-mobile.net/ ";
@@ -50,7 +71,18 @@ public class ChatActivity extends Activity {
 
 	private GoogleCloudMessaging gcm;
 	private NotificationHub hub;
-	private BroadcastReceiver receiver;
+
+	private static Long REQUESTID = 0l;
+
+	public static final String REQUEST_PACKAGE = "request_package";
+	BluetoothAdapter bluetoothAdapter;
+	public static Set<BluetoothDevice> pairedDevices;
+	IntentFilter filter;
+	BroadcastReceiver receiver;
+	ServerSocketThread serverSocketThread = new ServerSocketThread(this);
+	static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+	Map<String, Set<Long>> processedRequests = new HashMap<>();
 
 	/**
 	 * Mobile Service Client reference
@@ -126,9 +158,6 @@ public class ChatActivity extends Activity {
 			createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
 		}
 
-		Intent intent = new Intent(this, BlueToothService.class);
-		startService(intent);
-
 		receiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -136,8 +165,200 @@ public class ChatActivity extends Activity {
 			}
 		};
 		registerReceiver(receiver, new IntentFilter(CLOSE_APP));
+
+//		Intent intent = new Intent(this, BlueToothService.class);
+//		startService(intent);
+
+		startBluetooth();
+
 	}
-	
+
+	private void startBluetooth() {
+		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+		if(bluetoothAdapter==null){
+			Toast.makeText(getApplicationContext(), "No bluetooth detected", 0).show();
+			((Activity) getApplicationContext()).finish();
+		}
+		else{
+			registerBroadcastReceivers();
+
+			if(!bluetoothAdapter.isEnabled()){
+				turnOnBlueTooth();
+			} else {
+				updatePairedDevices();
+			}
+		}
+	}
+
+	private void updatePairedDevices() {
+		if(serverSocketThread != null)
+			serverSocketThread.closeConnect();
+
+		pairedDevices = bluetoothAdapter.getBondedDevices();
+		bluetoothAdapter.startDiscovery();
+
+		serverSocketThread.acceptConnect(bluetoothAdapter, uuid);
+		serverSocketThread.start();
+	}
+
+	private void registerBroadcastReceivers() {
+
+		receiver = new BroadcastReceiver(){
+			@Override
+			public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+
+			if (BluetoothDevice.ACTION_FOUND.equals(action)){
+				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+				pairDevice(device);
+			}
+			else if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){
+				final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+						BluetoothAdapter.ERROR);
+				switch (state) {
+					case BluetoothAdapter.STATE_TURNING_OFF:
+						if(serverSocketThread != null)
+							serverSocketThread.closeConnect();
+						sendBroadcast(new Intent(ChatActivity.CLOSE_APP));
+						break;
+					case BluetoothAdapter.STATE_ON:
+						updatePairedDevices();
+				}
+			}
+			}
+		};
+
+		filter = new IntentFilter();
+		filter.addAction(BluetoothDevice.ACTION_FOUND);
+		filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+		registerReceiver(receiver, filter);
+	}
+
+	private void turnOnBlueTooth() {
+		Intent dialogIntent = new Intent(this, EnableBlueToothActivity.class);
+		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(dialogIntent);
+	}
+
+	private void startDiscovery() {
+		bluetoothAdapter.cancelDiscovery();
+		bluetoothAdapter.startDiscovery();
+	}
+
+	//For Pairing
+	private void pairDevice(BluetoothDevice device) {
+		try {
+			Log.d("pairDevice()", "Start Pairing...");
+			device.getClass().getMethod("setPairingConfirmation", boolean.class).invoke(device, true);
+			device.getClass().getMethod("cancelPairingUserInput").invoke(device);
+			device.getClass().getMethod("createBond", (Class[]) null).invoke(device, (Object[]) null);
+			pairedDevices.add(device);
+			Log.d("pairDevice()", "Pairing finished.");
+		} catch (Exception e) {
+			Log.e("pairDevice()", e.getMessage());
+		}
+	}
+
+
+	//For UnPairing
+	private void unpairDevice(BluetoothDevice device) {
+		try {
+			Log.d("unpairDevice()", "Start Un-Pairing...");
+			Method m = device.getClass().getMethod("removeBond", (Class[]) null);
+			m.invoke(device, (Object[]) null);
+			pairedDevices.remove(device);
+			Log.d("unpairDevice()", "Un-Pairing finished.");
+		} catch (Exception e) {
+			Log.e("unpairDevice()", e.getMessage());
+		}
+	}
+
+	private void dataRequest(final RequestPackage requestPackage) {
+		requestPackage.relayPath.add(ChatActivity.EXTRA_USERNAME);
+
+		String url = "https://bluchain.azure-mobile.net/api/estar";
+		AsyncHttpClient client = new AsyncHttpClient();
+		try{
+			client.post(getApplicationContext(), url, new StringEntity(requestPackage.toString()), "application/json", new JsonHttpResponseHandler() {
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+					try {
+						RequestPackage responsePackage;
+						JSONObject obj = response.getJSONObject(0);
+						responsePackage = (RequestPackage) obj.get("response");
+						relayRequest(responsePackage);
+					} catch (Exception e) {
+
+					}
+				}
+			});
+		} catch (Exception e) {
+
+		}
+	}
+
+	private void relayRequest(RequestPackage responsePackage) {
+		if(responsePackage.destinationId.equals(ChatActivity.EXTRA_USERNAME)) {
+			return;
+		}
+
+		if(processedRequests.containsKey(responsePackage.senderId) && processedRequests.get(responsePackage.senderId).contains(responsePackage.requestId)) {
+			return;
+		}
+
+		for(BluetoothDevice pairedDevice: pairedDevices) {
+			BluetoothSocket socket = connect(pairedDevice, uuid);
+			if(socket != null) {
+				try {
+					ServerSocket.sendData(socket, responsePackage.toString());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private boolean isNetworkAvailable() {
+		ConnectivityManager connectivityManager
+				= (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+	public void handleRequestPackage(RequestPackage requestPackage) {
+		if(isNetworkAvailable()) {
+			dataRequest(requestPackage);
+		} else {
+			relayRequest(requestPackage);
+		}
+	}
+
+	public BluetoothSocket connect(BluetoothDevice bTDevice, UUID mUUID) {
+		BluetoothSocket bTSocket = null;
+		try {
+			bTSocket = bTDevice.createRfcommSocketToServiceRecord(mUUID);
+		} catch (IOException e) {
+			Log.d("CONNECTTHREAD","Could not create RFCOMM socket:" + e.toString());
+			return null;
+		}
+		try {
+			bTSocket.connect();
+		} catch(IOException e) {
+			Log.d("CONNECTTHREAD","Could not connect: " + e.toString());
+			try {
+				bTSocket.close();
+			} catch(IOException close) {
+				Log.d("CONNECTTHREAD", "Could not close connection:" + e.toString());
+				return null;
+			}
+		}
+		return bTSocket;
+	}
+
 	@SuppressWarnings("unchecked")
 	private void registerWithNotificationHubs() {
 	   new AsyncTask() {
@@ -195,21 +416,32 @@ public class ChatActivity extends Activity {
 		
 		Date currentDate = new Date(System.currentTimeMillis());
 		item.setTimeStamp(currentDate);
-		
-		// Insert the new item
-		mChatTable.insert(item, new TableOperationCallback<ChatItem>() {
 
-			public void onCompleted(ChatItem entity, Exception exception, ServiceFilterResponse response) {
-				
-				if (exception == null) {
-					mAdapter.add(entity);
-					mlistViewChat.setSelection(mlistViewChat.getCount() - 1);
-				} else {
-					createAndShowDialog(exception, "Error");
+		if(testRequest) {
+			RequestPackage requestPackage = new RequestPackage();
+			requestPackage.senderId = EXTRA_USERNAME;
+			requestPackage.requestId = REQUESTID++;
+			requestPackage.destinationId = "SERVER";
+			requestPackage.request = "THE_REQUEST";
+			requestPackage.relayPath.add(EXTRA_USERNAME);
+
+			handleRequestPackage(requestPackage);
+		} else {
+			// Insert the new item
+			mChatTable.insert(item, new TableOperationCallback<ChatItem>() {
+
+				public void onCompleted(ChatItem entity, Exception exception, ServiceFilterResponse response) {
+
+					if (exception == null) {
+						mAdapter.add(entity);
+						mlistViewChat.setSelection(mlistViewChat.getCount() - 1);
+					} else {
+						createAndShowDialog(exception, "Error");
+					}
+
 				}
-
-			}
-		});
+			});
+		}
 
 		mTextNewChat.setText("");
 	}

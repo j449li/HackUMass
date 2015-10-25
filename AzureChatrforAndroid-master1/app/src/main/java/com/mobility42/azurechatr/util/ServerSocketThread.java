@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
-import com.mobility42.azurechatr.services.BlueToothService;
+import com.mobility42.azurechatr.ChatActivity;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -17,9 +17,9 @@ public class ServerSocketThread extends Thread {
     private BluetoothSocket bTSocket;
     BluetoothServerSocket serverSocket;
 
-    private BlueToothService service;
+    private ChatActivity activity;
 
-    public ServerSocketThread(BlueToothService service) { this.service = service; }
+    public ServerSocketThread(ChatActivity activity) { this.activity = activity; }
 
     public void acceptConnect(BluetoothAdapter bTAdapter, UUID mUUID) {
         try {
@@ -50,7 +50,7 @@ public class ServerSocketThread extends Thread {
                 } else {
                     RequestPackage requestPackage = new RequestPackage(data);
 
-                    service.handleRequestPackage(requestPackage);
+                    activity.handleRequestPackage(requestPackage);
 
                     data = "";
                     break;

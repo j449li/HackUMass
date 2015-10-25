@@ -16,8 +16,6 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <service android:name=".services.BlueToothService" />
-
     <permission android:name="com.mobility42.azurechatr.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	<uses-permission android:name="com.mobility42.azurechatr.permission.C2D_MESSAGE"/>
 
