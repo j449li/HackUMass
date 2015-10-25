@@ -177,7 +177,7 @@ public class ChatActivity extends Activity {
 
 		item.setText(mTextNewChat.getText().toString());
 		// This is temporary until we add authentication to the Android version
-		item.setUserName("Mike Trout");
+		item.setUserName("Jays Arebad");
 		
 		Date currentDate = new Date(System.currentTimeMillis());
 		item.setTimeStamp(currentDate);

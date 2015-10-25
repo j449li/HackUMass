@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mobility42.azurechatr"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="17"
@@ -16,6 +17,7 @@
 	<uses-permission android:name="com.mobility42.azurechatr.permission.C2D_MESSAGE"/>
 
     <application
+        tools:replace="android:label"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"

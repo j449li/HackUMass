@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="bottom">
+    android:gravity="bottom"
+    android:background="@color/grey200">
 
     <ListView
         android:id="@+id/listViewChat"
@@ -17,10 +18,25 @@
 
     </ListView>
 
+    <!-- <ListView
+        android:id="@+id/listViewChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/grey200"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:listSelector="@android:color/transparent"
+        android:stackFromBottom="true"
+        android:transcriptMode="normal"
+        tools:listitem="@layout/message_sent">
+    </ListView> -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#71BCFA"
+        android:background="#23639b"
         android:padding="6dip"
         android:gravity="bottom"
         android:layout_gravity="bottom"
@@ -40,18 +56,33 @@
             android:layout_height="match_parent"
             android:layout_weight="0.90"
             android:ems="10"
-            android:hint="@string/add_textbox_hint" >
+            android:hint="@string/add_textbox_hint"
+            android:textColorHint="#f7f6ff"
+            android:textColor="#f7f6ff"/>
 
-            <requestFocus />
-        </EditText>
-
-        <Button
+       <!-- <Button
             android:id="@+id/buttonAddChat"
             android:layout_width="72dip"
             android:layout_height="match_parent"
             android:onClick="addItem"
-            android:text="@string/add_button_text" />
+            android:text="@string/add_button_text" /> -->
+
+        <ImageButton
+            android:id="@+id/buttonAddChat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?android:selectableItemBackground"
+            android:onClick="addItem"
+            android:src="@drawable/ic_send_text_offline" />
 
     </LinearLayout>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"></TableRow>
 
 </RelativeLayout>
