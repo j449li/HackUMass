@@ -1,8 +1,20 @@
 package com.mobility42.azurechatr;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.Timestamp;
 import java.util.List;
 
 import android.app.Activity;
@@ -51,7 +63,16 @@ import org.json.JSONObject;
 import java.util.*;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class ChatActivity extends Activity {
 	
@@ -288,25 +309,53 @@ public class ChatActivity extends Activity {
 
 		requestPackage.relayPath.add(ChatActivity.EXTRA_USERNAME);
 
-		String url = "https://bluchain.azure-mobile.net/api/estar";
-		AsyncHttpClient client = new AsyncHttpClient();
-		try{
-			client.post(getApplicationContext(), url, new StringEntity(requestPackage.toString()), "application/json", new JsonHttpResponseHandler() {
-				@Override
-				public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-					try {
-						RequestPackage responsePackage;
-						JSONObject obj = response.getJSONObject(0);
-						responsePackage = (RequestPackage) obj.get("response");
-						relayRequest(responsePackage);
-					} catch (Exception e) {
+		class Connection extends AsyncTask {
 
+			@Override
+			protected Object doInBackground(Object... arg0) {
+				try {
+					HttpClient httpClient = new DefaultHttpClient();
+					HttpPost httpPost = new HttpPost("https://bluchain.azure-mobile.net/api/estar");
+
+					List<NameValuePair> nameValuePair = new ArrayList<>(2);
+					nameValuePair.add(new BasicNameValuePair("request", requestPackage.toString().substring(1, requestPackage.toString().indexOf('>'))));
+					httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+
+					HttpResponse response = httpClient.execute(httpPost);
+
+					HttpEntity entity = response.getEntity();
+
+					if (entity != null) {
+						String retSrc = EntityUtils.toString(entity);
+						// parsing JSON
+						JSONObject result = new JSONObject(retSrc); //Convert String to JSON Object
+						mAdapter.clear();
+
+						JSONArray tokenList = result.getJSONArray("message");
+						for(int i=0 ; i<tokenList.length() ; i++) {
+							JSONObject jObj = tokenList.getJSONObject(i);
+							String id = jObj.getString("id");
+							String username = jObj.getString("username");
+							String text = jObj.getString("text");
+
+							ChatItem item = new ChatItem();
+							item.setId(id);
+							item.setText(text);
+							item.setUserName(username);
+							mAdapter.add(item);
+						}
 					}
-				}
-			});
-		} catch (Exception e) {
 
+					// write response to log
+					Log.d("Http Post Response:", response.toString());
+				} catch (Exception e) {
+					Log.e("ss", e.getMessage());
+				}
+				return null;
+			}
 		}
+
+		new Connection().execute();
 	}
 
 	private void relayRequest(RequestPackage requestPackage) {

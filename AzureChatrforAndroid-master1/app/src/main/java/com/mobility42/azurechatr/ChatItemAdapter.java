@@ -44,7 +44,7 @@ public class ChatItemAdapter extends ArrayAdapter<ChatItem> {
 			row = inflater.inflate(mLayoutResourceId, parent, false);
 		}
 
-		if (currentItem.getUserName().equals(ChatActivity.EXTRA_USERNAME)) {
+		if (currentItem.getUserName() != null && currentItem.getUserName().equals(ChatActivity.EXTRA_USERNAME)) {
 			//make the user an other people chat boxes different if there is time...
 			row.setTag(currentItem);
 			final TextView textView = (TextView) row.findViewById(R.id.textChatSender);
