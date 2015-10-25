@@ -6,30 +6,18 @@
     android:orientation="vertical"
     >
 
+    <ListView
+        android:id="@+id/listViewChat"
+        android:layout_width="match_parent"
+        android:layout_height="465dp"
+        android:padding="6dip"
+        tools:listitem="@layout/row_list_chat" >
+
+    </ListView>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:background="#71BCFA"
-        android:padding="6dip" >
-
-        <TextView
-            android:id="@+id/textViewTitle"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_weight="0.12"
-            android:text="@string/mobile_services"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
-
-        <ProgressBar
-            android:id="@+id/loadingProgressBar"
-            android:layout_width="28dp"
-            android:layout_height="28dp" />
-    </LinearLayout>
-    
-     <LinearLayout
-        android:layout_width="match_parent" 
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:background="#71BCFA"
         android:padding="6dip"  >
 
@@ -44,6 +32,11 @@
             <requestFocus />
        </EditText>
 
+        <ProgressBar
+            android:id="@+id/loadingProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/buttonAddChat"
             android:layout_width="72dip"
@@ -52,14 +45,5 @@
             android:text="@string/add_button_text" />
 
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/listViewChat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="6dip"
-        tools:listitem="@layout/row_list_chat" >
-
-    </ListView>
 
 </LinearLayout><!-- From: file:/C:/Users/Not-A-Mac/Documents/GitHub/HackUMass/AzureChatrforAndroid-master1/app/src/main/res/layout/activity_chat.xml -->

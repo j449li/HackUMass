@@ -175,7 +175,7 @@ public class ChatActivity extends Activity {
 
 		item.setText(mTextNewChat.getText().toString());
 		// This is temporary until we add authentication to the Android version
-		item.setUserName("Android User");
+		item.setUserName("Mike Trout");
 		
 		Date currentDate = new Date(System.currentTimeMillis());
 		item.setTimeStamp(currentDate);
@@ -208,6 +208,10 @@ public class ChatActivity extends Activity {
 			public void onCompleted(List<ChatItem> result, int count, Exception exception, ServiceFilterResponse response) {
 				if (exception == null) {
 					mAdapter.clear();
+
+					if (result.size() > 30) {
+						result.subList(0, result.size() - 29).clear();
+					}
 
 					for (ChatItem item : result) {
 						mAdapter.add(item);

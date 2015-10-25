@@ -6,37 +6,31 @@
     android:orientation="vertical"
     >
 
+    <ListView
+        android:id="@+id/listViewChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6dip"
+        tools:listitem="@layout/row_list_chat" >
+
+    </ListView>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:background="#71BCFA"
-        android:padding="6dip" >
-
-        <TextView
-            android:id="@+id/textViewTitle"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_weight="0.12"
-            android:text="@string/mobile_services"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+        android:padding="6dip"
+        android:layout_gravity="bottom">
 
         <ProgressBar
             android:id="@+id/loadingProgressBar"
-            android:layout_width="28dp"
-            android:layout_height="28dp" />
-    </LinearLayout>
-    
-     <LinearLayout
-        android:layout_width="match_parent" 
-        android:layout_height="wrap_content" 
-        android:background="#71BCFA"
-        android:padding="6dip"  >
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
 
         <EditText
             android:id="@+id/textNewChat"
             android:layout_width="0dip"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.90"
             android:ems="10"
             android:hint="@string/add_textbox_hint" >
@@ -47,19 +41,10 @@
         <Button
             android:id="@+id/buttonAddChat"
             android:layout_width="72dip"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:onClick="addItem"
             android:text="@string/add_button_text" />
 
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/listViewChat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="6dip"
-        tools:listitem="@layout/row_list_chat" >
-
-    </ListView>
 
 </LinearLayout>
