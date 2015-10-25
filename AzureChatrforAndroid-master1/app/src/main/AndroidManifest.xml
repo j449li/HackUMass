@@ -32,6 +32,7 @@
             	<category android:name="android.intent.category.LAUNCHER" />
         	</intent-filter>
     	</activity>
+        <activity android:name=".EnableBlueToothActivity" />
     	<receiver android:name="com.microsoft.windowsazure.notifications.NotificationsBroadcastReceiver"
     		android:permission="com.google.android.c2dm.permission.SEND">
     		<intent-filter>
