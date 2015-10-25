@@ -278,6 +278,15 @@ public class ChatActivity extends Activity {
 	}
 
 	private void dataRequest(final RequestPackage requestPackage) {
+		if(requestPackage.destinationId.equals(ChatActivity.EXTRA_USERNAME)) {
+			//TODO
+			return;
+		}
+
+		if(processedRequests.containsKey(requestPackage.senderId) && processedRequests.get(requestPackage.senderId).contains(requestPackage.requestId)) {
+			return;
+		}
+
 		requestPackage.relayPath.add(ChatActivity.EXTRA_USERNAME);
 
 		String url = "https://bluchain.azure-mobile.net/api/estar";
@@ -301,12 +310,13 @@ public class ChatActivity extends Activity {
 		}
 	}
 
-	private void relayRequest(RequestPackage responsePackage) {
-		if(responsePackage.destinationId.equals(ChatActivity.EXTRA_USERNAME)) {
+	private void relayRequest(RequestPackage requestPackage) {
+		if(requestPackage.destinationId.equals(ChatActivity.EXTRA_USERNAME)) {
+			//TODO
 			return;
 		}
 
-		if(processedRequests.containsKey(responsePackage.senderId) && processedRequests.get(responsePackage.senderId).contains(responsePackage.requestId)) {
+		if(processedRequests.containsKey(requestPackage.senderId) && processedRequests.get(requestPackage.senderId).contains(requestPackage.requestId)) {
 			return;
 		}
 
@@ -314,7 +324,7 @@ public class ChatActivity extends Activity {
 			BluetoothSocket socket = connect(pairedDevice, uuid);
 			if(socket != null) {
 				try {
-					ServerSocket.sendData(socket, responsePackage.toString());
+					ServerSocket.sendData(socket, requestPackage.toString());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
