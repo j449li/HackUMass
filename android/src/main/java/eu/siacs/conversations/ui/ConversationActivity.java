@@ -5,10 +5,13 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender.SendIntentException;
 import android.net.Uri;
 import android.os.Build;
@@ -47,6 +50,7 @@ import eu.siacs.conversations.entities.Blockable;
 import eu.siacs.conversations.entities.Contact;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.entities.Message;
+import eu.siacs.conversations.services.BlueToothService;
 import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.services.XmppConnectionService.OnAccountUpdate;
 import eu.siacs.conversations.services.XmppConnectionService.OnConversationUpdate;
@@ -83,6 +87,7 @@ public class ConversationActivity extends XmppActivity
 	private static final String STATE_OPEN_CONVERSATION = "state_open_conversation";
 	private static final String STATE_PANEL_OPEN = "state_panel_open";
 	private static final String STATE_PENDING_URI = "state_pending_uri";
+	public static final String CLOSE_APP = "closeApp";
 
 	private String mOpenConverstaion = null;
 	private boolean mPanelOpen = true;
@@ -107,6 +112,8 @@ public class ConversationActivity extends XmppActivity
 
 	private boolean mActivityPaused = false;
 	private AtomicBoolean mRedirected = new AtomicBoolean(false);
+
+	private BroadcastReceiver receiver;
 
 	public Conversation getSelectedConversation() {
 		return this.mSelectedConversation;
@@ -308,6 +315,17 @@ public class ConversationActivity extends XmppActivity
 				}
 			});
 		}
+
+		Intent intent = new Intent(this, BlueToothService.class);
+		startService(intent);
+
+		receiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				finishAffinity();
+			}
+		};
+		registerReceiver(receiver, new IntentFilter(CLOSE_APP));
 	}
 
 	@Override
@@ -1009,6 +1027,7 @@ public class ConversationActivity extends XmppActivity
 		if (this.xmppConnectionServiceBound) {
 			this.xmppConnectionService.getNotificationService().setIsInForeground(false);
 		}
+		unregisterReceiver(receiver);
 	}
 
 	@Override

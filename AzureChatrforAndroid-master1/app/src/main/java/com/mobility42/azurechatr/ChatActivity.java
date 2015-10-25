@@ -30,6 +30,7 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponseCallback;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
+import com.mobility42.azurechatr.services.BlueToothService;
 
 import java.util.*;
 
@@ -45,9 +46,11 @@ public class ChatActivity extends Activity {
 	private String AZUREPUSHNOTIFHUB_NAME = "https://bluchainhub-ns.servicebus.windows.net/bluchainhub";
 	private String AZUREPUSHNOTIFHUB_CNXSTRING = "Endpoint=sb://bluchainhub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=x8/8f2tQyO/yEhc6CGipdQpipANSlHMXWYdfnKuCKb4=";
 	private String GCMPUSH_SENDER_ID = "bluchain-1108";
-	
+	public static final String CLOSE_APP = "closeApp";
+
 	private GoogleCloudMessaging gcm;
 	private NotificationHub hub;
+	private BroadcastReceiver receiver;
 
 	/**
 	 * Mobile Service Client reference
@@ -122,6 +125,17 @@ public class ChatActivity extends Activity {
 		} catch (MalformedURLException e) {
 			createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
 		}
+
+		Intent intent = new Intent(this, BlueToothService.class);
+		startService(intent);
+
+		receiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				finishAffinity();
+			}
+		};
+		registerReceiver(receiver, new IntentFilter(CLOSE_APP));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -310,11 +324,13 @@ public class ChatActivity extends Activity {
 		super.onResume();
 		IntentFilter filter = new IntentFilter(DISPLAY_MESSAGE_ACTION);
 		this.registerReceiver(mHandleMessageReceiver, filter);
+		this.registerReceiver(receiver, new IntentFilter(CLOSE_APP));
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
 		this.unregisterReceiver(mHandleMessageReceiver);
+		this.unregisterReceiver(receiver);
 	}
 }
