@@ -34,7 +34,6 @@ public class ServerSocketThread extends Thread {
         try {
             while(true) {
                 sleep(1000);
-                String data = "";
                 try {
                     bTSocket = serverSocket.accept();
                 } catch (IOException e) {
@@ -43,16 +42,13 @@ public class ServerSocketThread extends Thread {
                 }
                 if (bTSocket != null) {
                     try {
-                        data += (char) ServerSocket.receiveData(bTSocket);
+                        String data = ServerSocket.receiveData(bTSocket);
+                        RequestPackage requestPackage = new RequestPackage(data);
+                        activity.handleRequestPackage(requestPackage);
                     } catch (IOException e) {
                         Log.d("SERVERCONNECT", "Could not close ServerSocket:" + e.toString());
                     }
                 } else {
-                    RequestPackage requestPackage = new RequestPackage(data);
-
-                    activity.handleRequestPackage(requestPackage);
-
-                    data = "";
                     break;
                 }
             }

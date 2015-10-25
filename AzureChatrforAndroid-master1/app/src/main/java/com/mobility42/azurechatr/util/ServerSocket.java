@@ -19,11 +19,15 @@ public class ServerSocket {
         outputStream.write(data.getBytes());
     }
 
-    public static int receiveData(BluetoothSocket socket) throws IOException{
-        byte[] buffer = new byte[4];
+    public static String receiveData(BluetoothSocket socket) throws IOException{
+        byte[] buffer = new byte[6000];
         ByteArrayInputStream input = new ByteArrayInputStream(buffer);
         InputStream inputStream = socket.getInputStream();
         inputStream.read(buffer);
-        return input.read();
+        String data = "";
+        for(byte b : buffer) {
+            data += (char) b;
+        }
+        return data;
     }
 }
