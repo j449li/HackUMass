@@ -9,3 +9,4 @@
 *.iml
 .idea/
 */build
+*/local.properties
