@@ -43,6 +43,7 @@ public class ServerSocketThread extends Thread {
                 if (bTSocket != null) {
                     try {
                         String data = ServerSocket.receiveData(bTSocket);
+                        data = data.substring(1, data.indexOf('>'));
                         RequestPackage requestPackage = new RequestPackage(data);
                         activity.handleRequestPackage(requestPackage);
                     } catch (IOException e) {
