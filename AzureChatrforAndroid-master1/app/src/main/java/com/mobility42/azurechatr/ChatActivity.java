@@ -212,10 +212,6 @@ public class ChatActivity extends Activity {
 				if (exception == null) {
 					mAdapter.clear();
 
-					if (result.size() > 30) {
-						result.subList(0, result.size() - 29).clear();
-					}
-
 					for (ChatItem item : result) {
 						mAdapter.add(item);
 					}

@@ -39,7 +39,7 @@ public class MyHandler extends NotificationsHandler {
 	    NotificationCompat.Builder mBuilder =
 	          new NotificationCompat.Builder(ctx)
 	          .setSmallIcon(R.drawable.ic_launcher)
-	          .setContentTitle("AzureChatr for Android")
+	          .setContentTitle("BluChain")
 	          .setStyle(new NotificationCompat.BigTextStyle()
 	                     .bigText(msg))
 	          .setContentText(msg);
