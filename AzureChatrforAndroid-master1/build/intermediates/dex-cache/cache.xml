@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-measurement\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="482de223655d06253cc6a4955d653f8994169500">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-651163d8994fd9a2b6b14f6794fcf45e9cc38aa5.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-drive\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3c729e6d76a36c5dc27e6a4c4009296f49eaa88a">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-3518588dee5d33711dcd3504b414712504cce017.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2a7e47da654546f9457deb6132364f1bf33a1857">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-7ac14be82d375e8a60ca2a99691c3102e096f5d7.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-identity\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d294caf562c4c678b2ef351662a0ca6f1a4d06c0">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-df2dfce748b74cbfa3db4f1d658dcdd31fefd039.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\22.2.0\jars\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0632f06970823b7e3436f649bfa65b47035c91d0">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-ed51a6c6d3080799d86c8123cf23571cab9e515f.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-fitness\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="9cf8c0ef60847621c7ad00b4f78dbfc9daba4af2">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-700e51fb0184d3f17250c9833fd097135062c637.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3aed37c38c56679602255dd72ef356da5d327cda">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-d84efe5a0f6ae154667c0c4d9ce09dfeda124e56.jar" />
+    </item>
+    <item
+        jar="D:\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\23.1.0\support-annotations-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\support-annotations-23.1.0-9edcc179b17887cbc5d1dbe6cf698be722c80c7c.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appinvite\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b92002cb2f0e11a226ac5bac6dff1dc2a9d0b774">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-75f01f7be87e6461b2a54627af8cb99e777e7eeb.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-vision\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="17449c47df35c754b257532052f1270c444f7993">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-2d02a2bb19506dcfe6f02d49f372cd48f50a2186.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\libs\notifications-1.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d2498fce7adbdb5ebd37dafc56d8056db60f51fe">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\notifications-1.0.1-cc38004abc7555f24d27a799ba1a934af5511eee.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-panorama\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d93480da1d303122ee67dc3bc23e6297bdef9951">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-72a818ea09a4aea311a4f1adb6c3a0efcd0c7953.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-plus\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d61920aba361832a9545a43fa8c9453eb02f18f7">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-c4b3581c163742d58ccdc496dce61dee12a71236.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.2.2\1f96456ca233dec780aa224bff076d8e8bca3908\gson-2.2.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1f96456ca233dec780aa224bff076d8e8bca3908">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\gson-2.2.2-0aafdabf5da474522974b5d6fa732821d2b1c99e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="997773777cf3904c11d6764fe3b7668538220e49">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-2f77ba26f050a4876281c7260a810a3807a367d0.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\libs\mobileservices-1.1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e44b16a25aa48dda9e26e3eb0e1d52a0af853e3e">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\mobileservices-1.1.0-984810e10a486f682dc709b28ccd02e8fb77c9d9.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="95758a2905669affbffc5ddd262921d375674fad">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-d2ca8b176941edfe2470713f69346730f1f49381.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-safetynet\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3b05c18f60969ecc2ba49c0409c4b96be2d9cb0c">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-c0c7149158f7a4faa07fb121ef4b073458774d85.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.0\jars\libs\internal_impl-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\internal_impl-23.1.0-7bbc03bcf44c9b7222b84d6217256478b190d0d0.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-nearby\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="041d93cf0533591c29d1d7263b2fa114dbfb20bd">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-fb7a14e9f57fb7a157094de9e8687d7f829e961c.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d0dda274b703dd9c5bb056867649d22b4171ae7d">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-7c7580d2009ad924be9cd77567a4beda58a132a1.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-a0d2e1b6f951fc4978bda6db82810118a588301a.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="82825756edeeb3b56b15e73b2edd56e93da5a444">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-c3f64de035059e3a156e1603acb99ee5b846a067.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-da1556cc44ad1bdeba1dd65fc0b4e4e26679ee70.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-cast\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3178362320bcf51228835b60ff978efadfd1f783">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-2ef6b4dbc39ef7d6489f5733215df0d1046649d8.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wallet\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="325788a04b436a0bccbc5b4c54cf0f12ebdcbd2d">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-64b02d1c1ee2b5bfd4ae11e090d89cec0e5ae724.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-games\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="993834cb17d07d51b92db89d2c330243592ebf77">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-2e455af5ce72f4fdff2e6d94cf659517c578ea38.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wearable\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="97f3b099801a9ad9d70e835b9125273e986eb68d">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-26f0d2b3f6839ed84a4161a35789b3e6be592812.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\libs\notification-hubs-0.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d945acb4b18ae3294f60803e8097fb2797d5ac4d">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\notification-hubs-0.2-956282b407c03713c182cf786726ca76f96a2e37.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="dcb5b75baf05d92e61d5706737200ee55949f97b">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-7ee11d11afec3362e548c139fbd26d408aece04c.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="dcf8c83c3dead00a6c4fe313e95f7aaca20dc641">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-eb6e0cb9ca894e6f2f042dedc33dfa0e09e7678f.jar" />
+    </item>
+    <item
+        jar="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\8.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="4477ea44f5ec5ad064022a22691732d7638ff197">
+        <dex dex="C:\Users\Not-A-Mac\Documents\GitHub\HackUMass\AzureChatrforAndroid-master1\app\build\intermediates\pre-dexed\debug\classes-e9a7ad70a045d7ae29a32d7e70c7ca865026a8d6.jar" />
+    </item>
+
+</items>
