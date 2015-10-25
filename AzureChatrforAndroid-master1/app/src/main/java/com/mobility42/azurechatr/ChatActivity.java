@@ -278,12 +278,11 @@ public class ChatActivity extends Activity {
 	}
 
 	private void dataRequest(final RequestPackage requestPackage) {
-		if(requestPackage.destinationId.equals(ChatActivity.EXTRA_USERNAME)) {
-			//TODO
+		if(checkDestination(requestPackage)) {
 			return;
 		}
 
-		if(processedRequests.containsKey(requestPackage.senderId) && processedRequests.get(requestPackage.senderId).contains(requestPackage.requestId)) {
+		if (processedRequests.containsKey(requestPackage.senderId) && processedRequests.get(requestPackage.senderId).contains(requestPackage.requestId)) {
 			return;
 		}
 
@@ -311,8 +310,7 @@ public class ChatActivity extends Activity {
 	}
 
 	private void relayRequest(RequestPackage requestPackage) {
-		if(requestPackage.destinationId.equals(ChatActivity.EXTRA_USERNAME)) {
-			//TODO
+		if(checkDestination(requestPackage)) {
 			return;
 		}
 
@@ -330,6 +328,22 @@ public class ChatActivity extends Activity {
 				}
 			}
 		}
+	}
+
+	private boolean checkDestination(RequestPackage requestPackage) {
+		if(requestPackage.destinationId.equals(ChatActivity.EXTRA_USERNAME)) {
+			if(requestPackage.request.contains("NEWMESSAGE")) {
+				ChatItem item = new ChatItem();
+				item.setId(new Date().toString());
+				item.setText(requestPackage.request.substring(requestPackage.request.indexOf("="), requestPackage.request.indexOf(";FROM=") + 6));
+				item.setTimeStamp(new Date());
+				item.setUserName(requestPackage.request.substring(requestPackage.request.indexOf(";FROM=") + 6));
+				mAdapter.add(item);
+				mlistViewChat.setSelection(mlistViewChat.getCount() - 1);
+			}
+			return true;
+		}
+		return false;
 	}
 
 	private boolean isNetworkAvailable() {
@@ -432,7 +446,7 @@ public class ChatActivity extends Activity {
 			requestPackage.senderId = EXTRA_USERNAME;
 			requestPackage.requestId = REQUESTID++;
 			requestPackage.destinationId = "SERVER";
-			requestPackage.request = "THE_REQUEST";
+			requestPackage.request = "MESSAGE="+item.toString();
 			requestPackage.relayPath.add(EXTRA_USERNAME);
 
 			handleRequestPackage(requestPackage);

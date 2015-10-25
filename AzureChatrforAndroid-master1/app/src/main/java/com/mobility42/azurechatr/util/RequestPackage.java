@@ -17,7 +17,7 @@ public class RequestPackage implements Serializable {
     public RequestPackage() {}
 
     public RequestPackage(String str) {
-        String[] split = str.split("|");
+        String[] split = str.split("\\|");
         senderId = split[0];
         requestId = Long.valueOf(split[1]);
         destinationId = split[2];
