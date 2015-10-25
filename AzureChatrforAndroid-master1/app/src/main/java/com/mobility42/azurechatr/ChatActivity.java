@@ -36,7 +36,7 @@ import java.util.*;
 public class ChatActivity extends Activity {
 	
 	public static final String DISPLAY_MESSAGE_ACTION = "displaymessage";
-	public static final String EXTRA_USERNAME = "username";
+	public static final String EXTRA_USERNAME = "Jay Sarbad";
 	public static final String EXTRA_MESSAGE = "message";
 
 	// Secret IDs, Azure App Keys and Connection Strings NOT to be shared with the public
@@ -177,7 +177,7 @@ public class ChatActivity extends Activity {
 
 		item.setText(mTextNewChat.getText().toString());
 		// This is temporary until we add authentication to the Android version
-		item.setUserName("Jays Arebad");
+		item.setUserName(EXTRA_USERNAME);
 		
 		Date currentDate = new Date(System.currentTimeMillis());
 		item.setTimeStamp(currentDate);

@@ -44,10 +44,28 @@ public class ChatItemAdapter extends ArrayAdapter<ChatItem> {
 			row = inflater.inflate(mLayoutResourceId, parent, false);
 		}
 
-		row.setTag(currentItem);
-		final TextView textView = (TextView) row.findViewById(R.id.textChatItem);
-		textView.setText(currentItem.getUserName() + " - " + currentItem.getText());
-		textView.setEnabled(true);
+		if (currentItem.getUserName().equals(ChatActivity.EXTRA_USERNAME)) {
+			//make the user an other people chat boxes different if there is time...
+			row.setTag(currentItem);
+			final TextView textView = (TextView) row.findViewById(R.id.textChatSender);
+			textView.setText(currentItem.getUserName());
+			textView.setEnabled(true);
+
+			final TextView textMsg = (TextView) row.findViewById(R.id.textChatMsg);
+			textMsg.setText(" " + currentItem.getText());
+			textMsg.setEnabled(true);
+
+		} else {
+
+			row.setTag(currentItem);
+			final TextView textView = (TextView) row.findViewById(R.id.textChatSender);
+			textView.setText(currentItem.getUserName());
+			textView.setEnabled(true);
+
+			final TextView textMsg = (TextView) row.findViewById(R.id.textChatMsg);
+			textMsg.setText(" " + currentItem.getText());
+			textMsg.setEnabled(true);
+		}
 
 		return row;
 	}
