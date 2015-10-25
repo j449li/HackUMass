@@ -64,6 +64,8 @@ public class ChatActivity extends Activity {
 	 */
 	private ChatItemAdapter mAdapter;
 
+	private ListView mlistViewChat;
+
 	/**
 	 * EditText containing the "New Chat" text
 	 */
@@ -102,8 +104,8 @@ public class ChatActivity extends Activity {
 
 			// Create an adapter to bind the items with the view
 			mAdapter = new ChatItemAdapter(this, R.layout.row_list_chat);
-			ListView listViewChat = (ListView) findViewById(R.id.listViewChat);
-			listViewChat.setAdapter(mAdapter);
+			mlistViewChat = (ListView) findViewById(R.id.listViewChat);
+			mlistViewChat.setAdapter(mAdapter);
 		
 			// Load the items from the Mobile Service
 			refreshItemsFromTable();
@@ -187,6 +189,7 @@ public class ChatActivity extends Activity {
 				
 				if (exception == null) {
 					mAdapter.add(entity);
+					mlistViewChat.setSelection(mlistViewChat.getCount() - 1);
 				} else {
 					createAndShowDialog(exception, "Error");
 				}
@@ -216,6 +219,8 @@ public class ChatActivity extends Activity {
 					for (ChatItem item : result) {
 						mAdapter.add(item);
 					}
+
+					mlistViewChat.setSelection(mlistViewChat.getCount() - 1);
 
 				} else {
 					createAndShowDialog(exception, "Error");

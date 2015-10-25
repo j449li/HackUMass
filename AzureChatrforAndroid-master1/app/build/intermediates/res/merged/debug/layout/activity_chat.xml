@@ -1,17 +1,19 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
+    android:id="@+id/GridLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    >
+    android:gravity="bottom">
 
     <ListView
         android:id="@+id/listViewChat"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="6dip"
-        tools:listitem="@layout/row_list_chat" >
+        tools:listitem="@layout/row_list_chat"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentStart="true">
 
     </ListView>
 
@@ -20,7 +22,12 @@
         android:layout_height="wrap_content"
         android:background="#71BCFA"
         android:padding="6dip"
-        android:layout_gravity="bottom">
+        android:gravity="bottom"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
 
         <ProgressBar
             android:id="@+id/loadingProgressBar"
@@ -36,7 +43,7 @@
             android:hint="@string/add_textbox_hint" >
 
             <requestFocus />
-       </EditText>
+        </EditText>
 
         <Button
             android:id="@+id/buttonAddChat"
@@ -47,4 +54,4 @@
 
     </LinearLayout>
 
-</LinearLayout><!-- From: file:/C:/Users/Not-A-Mac/Documents/GitHub/HackUMass/AzureChatrforAndroid-master1/app/src/main/res/layout/activity_chat.xml -->
+</RelativeLayout><!-- From: file:/C:/Users/Not-A-Mac/Documents/GitHub/HackUMass/AzureChatrforAndroid-master1/app/src/main/res/layout/activity_chat.xml -->
