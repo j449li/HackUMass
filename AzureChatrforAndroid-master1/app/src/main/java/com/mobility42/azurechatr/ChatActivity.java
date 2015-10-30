@@ -1,15 +1,35 @@
 package com.mobility42.azurechatr;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.Timestamp;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,8 +37,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.microsoft.windowsazure.messaging.*;
 import com.microsoft.windowsazure.notifications.NotificationsManager;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
@@ -30,8 +53,26 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponseCallback;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
+import com.mobility42.azurechatr.util.RequestPackage;
+import com.mobility42.azurechatr.util.ServerSocket;
+import com.mobility42.azurechatr.util.ServerSocketThread;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.*;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class ChatActivity extends Activity {
 	
@@ -39,15 +80,30 @@ public class ChatActivity extends Activity {
 	public static final String EXTRA_USERNAME = "Jay Sarbad";
 	public static final String EXTRA_MESSAGE = "message";
 
+	boolean testRequest = true;
+
 	// Secret IDs, Azure App Keys and Connection Strings NOT to be shared with the public
 	private String AZUREMOBILESERVICES_URI = "https://bluchain.azure-mobile.net/ ";
 	private String AZUREMOBILESERVICES_APPKEY = "ctYVxpxKJiUndMzYtqgKEkaTnNRUTf32";
 	private String AZUREPUSHNOTIFHUB_NAME = "https://bluchainhub-ns.servicebus.windows.net/bluchainhub";
 	private String AZUREPUSHNOTIFHUB_CNXSTRING = "Endpoint=sb://bluchainhub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=x8/8f2tQyO/yEhc6CGipdQpipANSlHMXWYdfnKuCKb4=";
 	private String GCMPUSH_SENDER_ID = "bluchain-1108";
-	
+	public static final String CLOSE_APP = "closeApp";
+
 	private GoogleCloudMessaging gcm;
 	private NotificationHub hub;
+
+	private static Long REQUESTID = 0l;
+
+	public static final String REQUEST_PACKAGE = "request_package";
+	BluetoothAdapter bluetoothAdapter;
+	public static Set<BluetoothDevice> pairedDevices;
+	IntentFilter filter;
+	BroadcastReceiver receiver;
+	ServerSocketThread serverSocketThread = new ServerSocketThread(this);
+	static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+	Map<String, Set<Long>> processedRequests = new HashMap<>();
 
 	/**
 	 * Mobile Service Client reference
@@ -122,8 +178,260 @@ public class ChatActivity extends Activity {
 		} catch (MalformedURLException e) {
 			createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
 		}
+
+		receiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				finishAffinity();
+			}
+		};
+		registerReceiver(receiver, new IntentFilter(CLOSE_APP));
+
+//		Intent intent = new Intent(this, BlueToothService.class);
+//		startService(intent);
+
+		startBluetooth();
+
 	}
-	
+
+	private void startBluetooth() {
+		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+		if(bluetoothAdapter==null){
+			Toast.makeText(getApplicationContext(), "No bluetooth detected", 0).show();
+			((Activity) getApplicationContext()).finish();
+		}
+		else{
+			registerBroadcastReceivers();
+
+			if(!bluetoothAdapter.isEnabled()){
+				turnOnBlueTooth();
+			} else {
+				updatePairedDevices();
+			}
+		}
+	}
+
+	private void updatePairedDevices() {
+		if(serverSocketThread != null)
+			serverSocketThread.closeConnect();
+
+		pairedDevices = bluetoothAdapter.getBondedDevices();
+		bluetoothAdapter.startDiscovery();
+
+		serverSocketThread.acceptConnect(bluetoothAdapter, uuid);
+		serverSocketThread.start();
+	}
+
+	private void registerBroadcastReceivers() {
+
+		receiver = new BroadcastReceiver(){
+			@Override
+			public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+
+			if (BluetoothDevice.ACTION_FOUND.equals(action)){
+				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+				pairDevice(device);
+			}
+			else if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){
+				final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+						BluetoothAdapter.ERROR);
+				switch (state) {
+					case BluetoothAdapter.STATE_TURNING_OFF:
+						if(serverSocketThread != null)
+							serverSocketThread.closeConnect();
+						sendBroadcast(new Intent(ChatActivity.CLOSE_APP));
+						break;
+					case BluetoothAdapter.STATE_ON:
+						updatePairedDevices();
+				}
+			}
+			}
+		};
+
+		filter = new IntentFilter();
+		filter.addAction(BluetoothDevice.ACTION_FOUND);
+		filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+		registerReceiver(receiver, filter);
+	}
+
+	private void turnOnBlueTooth() {
+		Intent dialogIntent = new Intent(this, EnableBlueToothActivity.class);
+		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(dialogIntent);
+	}
+
+	private void startDiscovery() {
+		bluetoothAdapter.cancelDiscovery();
+		bluetoothAdapter.startDiscovery();
+	}
+
+	//For Pairing
+	private void pairDevice(BluetoothDevice device) {
+		try {
+			Log.d("pairDevice()", "Start Pairing...");
+			device.getClass().getMethod("setPairingConfirmation", boolean.class).invoke(device, true);
+			device.getClass().getMethod("cancelPairingUserInput").invoke(device);
+			device.getClass().getMethod("createBond", (Class[]) null).invoke(device, (Object[]) null);
+			pairedDevices.add(device);
+			Log.d("pairDevice()", "Pairing finished.");
+		} catch (Exception e) {
+			Log.e("pairDevice()", e.getMessage());
+		}
+	}
+
+
+	//For UnPairing
+	private void unpairDevice(BluetoothDevice device) {
+		try {
+			Log.d("unpairDevice()", "Start Un-Pairing...");
+			Method m = device.getClass().getMethod("removeBond", (Class[]) null);
+			m.invoke(device, (Object[]) null);
+			pairedDevices.remove(device);
+			Log.d("unpairDevice()", "Un-Pairing finished.");
+		} catch (Exception e) {
+			Log.e("unpairDevice()", e.getMessage());
+		}
+	}
+
+	private void dataRequest(final RequestPackage requestPackage) {
+		if(checkDestination(requestPackage)) {
+			return;
+		}
+
+		if (processedRequests.containsKey(requestPackage.senderId) && processedRequests.get(requestPackage.senderId).contains(requestPackage.requestId)) {
+			return;
+		}
+
+		requestPackage.relayPath.add(ChatActivity.EXTRA_USERNAME);
+
+		class Connection extends AsyncTask {
+
+			@Override
+			protected Object doInBackground(Object... arg0) {
+				try {
+					HttpClient httpClient = new DefaultHttpClient();
+					HttpPost httpPost = new HttpPost("https://bluchain.azure-mobile.net/api/estar");
+
+					List<NameValuePair> nameValuePair = new ArrayList<>(2);
+					nameValuePair.add(new BasicNameValuePair("request", requestPackage.toString().substring(1, requestPackage.toString().indexOf('>'))));
+					httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+
+					HttpResponse response = httpClient.execute(httpPost);
+
+					HttpEntity entity = response.getEntity();
+
+					if (entity != null) {
+						String retSrc = EntityUtils.toString(entity);
+						// parsing JSON
+						JSONObject result = new JSONObject(retSrc); //Convert String to JSON Object
+						mAdapter.clear();
+
+						JSONArray tokenList = result.getJSONArray("message");
+						for(int i=0 ; i<tokenList.length() ; i++) {
+							JSONObject jObj = tokenList.getJSONObject(i);
+							String id = jObj.getString("id");
+							String username = jObj.getString("username");
+							String text = jObj.getString("text");
+
+							ChatItem item = new ChatItem();
+							item.setId(id);
+							item.setText(text);
+							item.setUserName(username);
+							mAdapter.add(item);
+						}
+					}
+
+					// write response to log
+					Log.d("Http Post Response:", response.toString());
+				} catch (Exception e) {
+					Log.e("ss", e.getMessage());
+				}
+				return null;
+			}
+		}
+
+		new Connection().execute();
+	}
+
+	private void relayRequest(RequestPackage requestPackage) {
+		if(checkDestination(requestPackage)) {
+			return;
+		}
+
+		if(processedRequests.containsKey(requestPackage.senderId) && processedRequests.get(requestPackage.senderId).contains(requestPackage.requestId)) {
+			return;
+		}
+
+		for(BluetoothDevice pairedDevice: pairedDevices) {
+			BluetoothSocket socket = connect(pairedDevice, uuid);
+			if(socket != null) {
+				try {
+					ServerSocket.sendData(socket, requestPackage.toString());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private boolean checkDestination(RequestPackage requestPackage) {
+		if(requestPackage.destinationId.equals(ChatActivity.EXTRA_USERNAME)) {
+			if(requestPackage.request.contains("NEWMESSAGE")) {
+				ChatItem item = new ChatItem();
+				item.setId(new Date().toString());
+				item.setText(requestPackage.request.substring(requestPackage.request.indexOf("="), requestPackage.request.indexOf(";FROM=") + 6));
+				item.setTimeStamp(new Date());
+				item.setUserName(requestPackage.request.substring(requestPackage.request.indexOf(";FROM=") + 6));
+				mAdapter.add(item);
+				mlistViewChat.setSelection(mlistViewChat.getCount() - 1);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isNetworkAvailable() {
+		ConnectivityManager connectivityManager
+				= (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+	public void handleRequestPackage(RequestPackage requestPackage) {
+		if(isNetworkAvailable()) {
+			dataRequest(requestPackage);
+		} else {
+			relayRequest(requestPackage);
+		}
+	}
+
+	public BluetoothSocket connect(BluetoothDevice bTDevice, UUID mUUID) {
+		BluetoothSocket bTSocket = null;
+		try {
+			bTSocket = bTDevice.createRfcommSocketToServiceRecord(mUUID);
+		} catch (IOException e) {
+			Log.d("CONNECTTHREAD","Could not create RFCOMM socket:" + e.toString());
+			return null;
+		}
+		try {
+			bTSocket.connect();
+		} catch(IOException e) {
+			Log.d("CONNECTTHREAD","Could not connect: " + e.toString());
+			try {
+				bTSocket.close();
+			} catch(IOException close) {
+				Log.d("CONNECTTHREAD", "Could not close connection:" + e.toString());
+				return null;
+			}
+		}
+		return bTSocket;
+	}
+
 	@SuppressWarnings("unchecked")
 	private void registerWithNotificationHubs() {
 	   new AsyncTask() {
@@ -181,21 +489,32 @@ public class ChatActivity extends Activity {
 		
 		Date currentDate = new Date(System.currentTimeMillis());
 		item.setTimeStamp(currentDate);
-		
-		// Insert the new item
-		mChatTable.insert(item, new TableOperationCallback<ChatItem>() {
 
-			public void onCompleted(ChatItem entity, Exception exception, ServiceFilterResponse response) {
-				
-				if (exception == null) {
-					mAdapter.add(entity);
-					mlistViewChat.setSelection(mlistViewChat.getCount() - 1);
-				} else {
-					createAndShowDialog(exception, "Error");
+		if(testRequest) {
+			RequestPackage requestPackage = new RequestPackage();
+			requestPackage.senderId = EXTRA_USERNAME;
+			requestPackage.requestId = REQUESTID++;
+			requestPackage.destinationId = "SERVER";
+			requestPackage.request = "MESSAGE="+item.toString();
+			requestPackage.relayPath.add(EXTRA_USERNAME);
+
+			handleRequestPackage(requestPackage);
+		} else {
+			// Insert the new item
+			mChatTable.insert(item, new TableOperationCallback<ChatItem>() {
+
+				public void onCompleted(ChatItem entity, Exception exception, ServiceFilterResponse response) {
+
+					if (exception == null) {
+						mAdapter.add(entity);
+						mlistViewChat.setSelection(mlistViewChat.getCount() - 1);
+					} else {
+						createAndShowDialog(exception, "Error");
+					}
+
 				}
-
-			}
-		});
+			});
+		}
 
 		mTextNewChat.setText("");
 	}
@@ -310,11 +629,13 @@ public class ChatActivity extends Activity {
 		super.onResume();
 		IntentFilter filter = new IntentFilter(DISPLAY_MESSAGE_ACTION);
 		this.registerReceiver(mHandleMessageReceiver, filter);
+		this.registerReceiver(receiver, new IntentFilter(CLOSE_APP));
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
 		this.unregisterReceiver(mHandleMessageReceiver);
+		this.unregisterReceiver(receiver);
 	}
 }
